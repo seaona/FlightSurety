@@ -38,19 +38,17 @@ contract FlightSuretyApp {
     uint8 private constant STATUS_NOT_REGISTERED = 0;
     uint8 private constant STATUS_REGISTERED = 10;
     uint8 private constant STATUS_FULL_MEMBER = 20; // Has payed the 10ETH fee
-    uint8 private constant STATUS_UNDER_REGISTRATION_PROCESS = 30;
 
     struct Airline {
-        address airline;
         uint8 statusCode;
-        uint8 votes;
+        address[] votes;
     }
 
     mapping(address => Airline) private airlines;
+    address[] private airlineAccts;
 
     // Multiparty consensus
     uint constant M = 4;
-    address[] multiCalls = new address[](0);
 
  
     /********************************************************************************************/
@@ -80,6 +78,14 @@ contract FlightSuretyApp {
         _;
     }
 
+    /**
+    * @dev Modifier that requires the "ContractOwner" account to be the function caller
+    */
+    modifier requireFundedAirline()
+    {
+        require(msg.sender)
+    }
+
     /********************************************************************************************/
     /*                                       CONSTRUCTOR                                        */
     /********************************************************************************************/
@@ -92,6 +98,7 @@ contract FlightSuretyApp {
         contractOwner = msg.sender;
         flightSuretyData = FlightSuretyData(dataContract);
         registerAirline(msg.sender);
+        airlineAccts.push(msg.sender);
     }
 
     /********************************************************************************************/
@@ -113,19 +120,50 @@ contract FlightSuretyApp {
     *
     */   
     function registerAirline (address airline) external pure returns(bool success, uint256 votes) {
-        // require(msg.sender ) // we require the msg- sender be ok
-        bool isDuplicate = false;
-        for(uint i=0; i<multiCalls.length; i++) {
-            if(multiCalls[i] == msg.sender) {
-                isDuplicate = true;
-                break;
+        require(airlines[airline].statusCode == 0, "This airline has already been registered");
+        require(airlines[msg.sender] > 0, "The function caller is not registered");
+        require(airlines[airline].votes[msg.sender] == 0, "The function caller has already voted for registering this airline");
+        
+        bool success = false;
+
+        if(airlineActts.length < 5) {
+            var airline = airlines[airline];
+            airlines[airline].statusCode = 10;
+            airlineAccts.push(airline);
+            success = true;
+        }
+
+        else {
+            if(airlines[airline] == 0 ) {
+                var airline = airlines[airline];
+                airline.statusCode = 0;
+                airline.votes.push(msg.sender);
+                success = true;
+            }
+
+            else {
+                airline.votes.push(msg.sender);
+                if(airline.votes.length == M) {
+                    airlines[airline].statusCode = 10;
+                    success = true;
+                }
             }
         }
-        require(!isDuplicate, "Caller has already called this function");
+        
 
         flightSuretyData.registerAirline(airline);
-        return (success, 0);
+        return (success, airline.votes.length);
     }
+
+
+    /**
+    * @dev Airline pays registration fee
+    *
+    */  
+    function payRegistrationFee() external payable {
+        flightSuretyData.payRegistrationFee.value(msg.value)(msg.sender);
+    }
+
 
 
    /**
@@ -357,4 +395,5 @@ contract FlightSuretyApp {
 contract FlightSuretyData {
     function registerAirline(address airline) external;
     function isOperational() public view returns(bool);
+    function payRegistrationFee() external payable;
 }

@@ -11,7 +11,8 @@ contract FlightSuretyData {
 
     address private contractOwner;                                      // Account used to deploy contract
     bool private operational = true;                                    // Blocks all state changes throughout the contract if false
-
+    uint8 AIRLINE_FUNDING_VALUE = 10; 
+    
     /********************************************************************************************/
     /*                                       EVENT DEFINITIONS                                  */
     /********************************************************************************************/
@@ -87,6 +88,20 @@ contract FlightSuretyData {
     function registerAirline(address airline) external pure {
         
 
+    }
+
+/**
+    * @dev Airline pays registration fee
+    *
+    */ 
+
+    function payRegistrationFee() external payable 
+        requireIsOperational
+    {
+       require(msg.value == AIRLINE_FUNDING_VALUE, "The initial airline fee is equal to 10 ether");
+        address(this).transfer(msg.value);
+        airlines[addr].isFunded = true;
+        airlines_funded_list.push(addr);
     }
 
 
