@@ -1,9 +1,5 @@
 pragma solidity ^0.4.25;
 
-// It's important to avoid vulnerabilities due to numeric overflow bugs
-// OpenZeppelin's SafeMath library, when used correctly, protects agains such bugs
-// More info: https://www.nccgroup.trust/us/about-us/newsroom-and-events/blog/2018/november/smart-contract-insecurity-bad-arithmetic/
-
 import "../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol";
 
 /************************************************** */
@@ -16,7 +12,10 @@ contract FlightSuretyApp {
     /*                                       DATA VARIABLES                                     */
     /********************************************************************************************/
 
-    // Flight status codees
+    // Data Contract
+    FlightSuretyData flightSuretyData;
+
+    // Flight status codes
     uint8 private constant STATUS_CODE_UNKNOWN = 0;
     uint8 private constant STATUS_CODE_ON_TIME = 10;
     uint8 private constant STATUS_CODE_LATE_AIRLINE = 20;
@@ -34,6 +33,25 @@ contract FlightSuretyApp {
     }
     mapping(bytes32 => Flight) private flights;
 
+
+    // Airline status codes
+    uint8 private constant STATUS_NOT_REGISTERED = 0;
+    uint8 private constant STATUS_REGISTERED = 10;
+    uint8 private constant STATUS_FULL_MEMBER = 20; // Has payed the 10ETH fee
+    uint8 private constant STATUS_UNDER_REGISTRATION_PROCESS = 30;
+
+    struct Airline {
+        address airline;
+        uint8 statusCode;
+        uint8 votes;
+    }
+
+    mapping(address => Airline) private airlines;
+
+    // Multiparty consensus
+    uint constant M = 4;
+    address[] multiCalls = new address[](0);
+
  
     /********************************************************************************************/
     /*                                       FUNCTION MODIFIERS                                 */
@@ -49,8 +67,7 @@ contract FlightSuretyApp {
     */
     modifier requireIsOperational() 
     {
-         // Modify to call data contract's status
-        require(true, "Contract is currently not operational");  
+        require(flightSuretyData.isOperational() == true, "Contract is currently not operational");  
         _;  // All modifiers require an "_" which indicates where the function body will be added
     }
 
@@ -71,24 +88,19 @@ contract FlightSuretyApp {
     * @dev Contract constructor
     *
     */
-    constructor
-                                (
-                                ) 
-                                public 
-    {
+    constructor(address dataContract) public {
         contractOwner = msg.sender;
+        flightSuretyData = FlightSuretyData(dataContract);
+        registerAirline(msg.sender);
     }
 
     /********************************************************************************************/
     /*                                       UTILITY FUNCTIONS                                  */
     /********************************************************************************************/
 
-    function isOperational() 
-                            public 
-                            pure 
-                            returns(bool) 
-    {
-        return true;  // Modify to call data contract's status
+    function isOperational() public pure returns(bool) {
+        bool operational = flightSuretyData.isOperational();
+        return operational; 
     }
 
     /********************************************************************************************/
@@ -100,13 +112,18 @@ contract FlightSuretyApp {
     * @dev Add an airline to the registration queue
     *
     */   
-    function registerAirline
-                            (   
-                            )
-                            external
-                            pure
-                            returns(bool success, uint256 votes)
-    {
+    function registerAirline (address airline) external pure returns(bool success, uint256 votes) {
+        // require(msg.sender ) // we require the msg- sender be ok
+        bool isDuplicate = false;
+        for(uint i=0; i<multiCalls.length; i++) {
+            if(multiCalls[i] == msg.sender) {
+                isDuplicate = true;
+                break;
+            }
+        }
+        require(!isDuplicate, "Caller has already called this function");
+
+        flightSuretyData.registerAirline(airline);
         return (success, 0);
     }
 
@@ -335,3 +352,9 @@ contract FlightSuretyApp {
 // endregion
 
 }   
+
+// interface
+contract FlightSuretyData {
+    function registerAirline(address airline) external;
+    function isOperational() public view returns(bool);
+}
