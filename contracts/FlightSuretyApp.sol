@@ -83,7 +83,8 @@ contract FlightSuretyApp {
     */
     modifier requireFundedAirline()
     {
-        require(msg.sender)
+       // require(msg.sender);
+        _;
     }
 
     /********************************************************************************************/
@@ -97,7 +98,7 @@ contract FlightSuretyApp {
     constructor(address dataContract) public {
         contractOwner = msg.sender;
         flightSuretyData = FlightSuretyData(dataContract);
-        registerAirline(msg.sender);
+        this.registerAirline(msg.sender);
         airlineAccts.push(msg.sender);
     }
 
@@ -124,35 +125,34 @@ contract FlightSuretyApp {
         require(airlines[msg.sender] > 0, "The function caller is not registered");
         require(airlines[airline].votes[msg.sender] == 0, "The function caller has already voted for registering this airline");
         
-        bool success = false;
+        bool done = false;
+        string storage presentAirline = airlines[airline];
 
-        if(airlineActts.length < 5) {
-            var airline = airlines[airline];
+        if(airlineAccts.length < 5) {
             airlines[airline].statusCode = 10;
-            airlineAccts.push(airline);
-            success = true;
+            airlineAccts.push(presentAirline);
+            done = true;
         }
 
         else {
             if(airlines[airline] == 0 ) {
-                var airline = airlines[airline];
-                airline.statusCode = 0;
-                airline.votes.push(msg.sender);
-                success = true;
+                presentAirline.statusCode = 0;
+                presentAirline.votes.push(msg.sender);
+                done = true;
             }
 
             else {
                 airline.votes.push(msg.sender);
                 if(airline.votes.length == M) {
                     airlines[airline].statusCode = 10;
-                    success = true;
+                    done = true;
                 }
             }
         }
         
 
         flightSuretyData.registerAirline(airline);
-        return (success, airline.votes.length);
+        return (done, airline.votes.length);
     }
 
 
@@ -183,27 +183,14 @@ contract FlightSuretyApp {
     * @dev Called after oracle has updated flight status
     *
     */  
-    function processFlightStatus
-                                (
-                                    address airline,
-                                    string memory flight,
-                                    uint256 timestamp,
-                                    uint8 statusCode
-                                )
-                                internal
-                                pure
-    {
-    }
+    function processFlightStatus (address airline, string memory flight, uint256 timestamp, uint8 statusCode) internal pure                     
+        {
+            
+        }
 
 
     // Generate a request for oracles to fetch flight information
-    function fetchFlightStatus
-                        (
-                            address airline,
-                            string flight,
-                            uint256 timestamp                            
-                        )
-                        external
+    function fetchFlightStatus (address airline, string flight, uint256 timestamp) external
     {
         uint8 index = getRandomIndex(msg.sender);
 

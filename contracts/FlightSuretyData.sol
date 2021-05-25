@@ -100,8 +100,8 @@ contract FlightSuretyData {
     {
        require(msg.value == AIRLINE_FUNDING_VALUE, "The initial airline fee is equal to 10 ether");
         address(this).transfer(msg.value);
-        airlines[addr].isFunded = true;
-        airlines_funded_list.push(addr);
+       // airlines[addr].isFunded = true;
+      //  airlines_funded_list.push(addr);
     }
 
 
