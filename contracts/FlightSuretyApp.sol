@@ -26,10 +26,6 @@ contract FlightSuretyApp {
     address private contractOwner;          // Account used to deploy contract
 
  
-    // Multiparty consensus
-    uint constant M = 4;
-
- 
     /********************************************************************************************/
     /*                                       FUNCTION MODIFIERS                                 */
     /********************************************************************************************/
@@ -57,14 +53,6 @@ contract FlightSuretyApp {
         _;
     }
 
-    /**
-    * @dev Modifier that requires the "ContractOwner" account to be the function caller
-    */
-    modifier requireFundedAirline()
-    {
-       // require(msg.sender);
-        _;
-    }
 
     /********************************************************************************************/
     /*                                       CONSTRUCTOR                                        */
@@ -77,18 +65,25 @@ contract FlightSuretyApp {
     constructor(address dataContract) public {
         contractOwner = msg.sender;
         flightSuretyData = FlightSuretyData(dataContract);
-        flightSuretyData.registerAirline(contractOwner);
-        airlineAccts.push(msg.sender);
+        flightSuretyData.registerAirline(contractOwner, "Example Airline");
     }
 
     /********************************************************************************************/
     /*                                       UTILITY FUNCTIONS                                  */
     /********************************************************************************************/
 
-    function isOperational() public pure returns(bool) {
-        bool operational = flightSuretyData.isOperational();
-        return operational; 
+    function isOperational() public view returns(bool) {
+        return flightSuretyData.isOperational();
     }
+
+    function getRegisteredAirlines() public view returns(address[]) {
+        return flightSuretyData.getRegisteredAirlines();
+    }
+
+    function getFullMemberAirlines() public view returns(address[]){
+        return flightSuretyData.getFullMemberAirlines();
+    }
+
 
     /********************************************************************************************/
     /*                                     SMART CONTRACT FUNCTIONS                             */
@@ -99,39 +94,8 @@ contract FlightSuretyApp {
     * @dev Add an airline to the registration queue
     *
     */   
-    function registerAirline (address airline) external pure returns(bool success, uint256 votes) {
-        require(airlines[airline].statusCode == 0, "This airline has already been registered");
-        require(airlines[msg.sender] > 0, "The function caller is not registered");
-        require(airlines[airline].votes[msg.sender] == 0, "The function caller has already voted for registering this airline");
-        
-        bool done = false;
-        string storage presentAirline = airlines[airline];
-
-        if(airlineAccts.length < 5) {
-            airlines[airline].statusCode = 10;
-            airlineAccts.push(presentAirline);
-            done = true;
-        }
-
-        else {
-            if(airlines[airline] == 0 ) {
-                presentAirline.statusCode = 0;
-                presentAirline.votes.push(msg.sender);
-                done = true;
-            }
-
-            else {
-                airline.votes.push(msg.sender);
-                if(airline.votes.length == M) {
-                    airlines[airline].statusCode = 10;
-                    done = true;
-                }
-            }
-        }
-        
-
-        flightSuretyData.registerAirline(airline);
-        return (done, airline.votes.length);
+    function registerAirline (address airline, bytes32 name) public {
+        flightSuretyData.registerAirline(airline, name);
     }
 
 
@@ -140,7 +104,7 @@ contract FlightSuretyApp {
     *
     */  
     function payRegistrationFee() external payable {
-        flightSuretyData.payRegistrationFee.value(msg.value)(msg.sender);
+
     }
 
 
@@ -149,25 +113,24 @@ contract FlightSuretyApp {
     * @dev Register a future flight for insuring.
     *
     */  
-    function registerFlight
-                                (
-                                )
-                                external
-                                pure
-    {
-
+    function registerFlight(bytes32 code,
+                            bytes32 origin,
+                            bytes32 destination
+                            ) public {
+        flightSuretyData.registerFlight(code, origin, destination, msg.sender);
     }
     
    /**
     * @dev Called after oracle has updated flight status
     *
-    */  
+    */ 
+    /* 
     function processFlightStatus (address airline, string memory flight, uint256 timestamp, uint8 statusCode) internal pure                     
         {
             
         }
 
-
+*/
     // Generate a request for oracles to fetch flight information
     function fetchFlightStatus (address airline, string flight, uint256 timestamp) external
     {
@@ -291,7 +254,7 @@ contract FlightSuretyApp {
             emit FlightStatusInfo(airline, flight, timestamp, statusCode);
 
             // Handle flight status as appropriate
-            processFlightStatus(airline, flight, timestamp, statusCode);
+          //  processFlightStatus(airline, flight, timestamp, statusCode);
         }
     }
 
@@ -359,7 +322,10 @@ contract FlightSuretyApp {
 
 // interface
 contract FlightSuretyData {
-    function registerAirline(address airline) external;
+    function registerAirline(address airline, bytes32 name) external;
     function isOperational() public view returns(bool);
     function payRegistrationFee() external payable;
+    function getRegisteredAirlines() external view returns(address[]);
+    function getFullMemberAirlines() external view returns(address[]);
+    function registerFlight(bytes32 flight_code, bytes32 origin, bytes32 destination, address airline) external;
 }

@@ -91,7 +91,7 @@ contract FlightSuretyData {
     }
 
     modifier requireAirlineFullMember(address addr) {
-        require(airlines[addr].statusCode == FULL_MEMBER, "Airline cannot participate until submits 10ETH"););
+        require(airlines[addr].statusCode == FULL_MEMBER, "Airline cannot participate until submits 10ETH");
         _;
     }
 
@@ -143,8 +143,8 @@ contract FlightSuretyData {
     *      Can only be called from FlightSuretyApp contract
     *
     */   
-    function registerAirline(address airline, bytes32 name) external pure requireIsOperational requireAirlineNotRegistered {
-                
+    function registerAirline(address airline, bytes32 name) external view requireIsOperational requireAirlineNotRegistered(airline) {
+
 
     }
 
