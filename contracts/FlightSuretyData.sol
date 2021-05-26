@@ -13,6 +13,35 @@ contract FlightSuretyData {
     bool private operational = true;                                    // Blocks all state changes throughout the contract if false
     uint8 AIRLINE_FUNDING_VALUE = 10; 
     
+    struct Airline {
+        address addr;
+        bytes32 name;
+        uint8 statusCode;
+        address[] votes;
+    }
+
+    // Airline status codes
+    uint8 private constant STATUS_NOT_REGISTERED = 0;
+    uint8 private constant STATUS_REGISTERED = 10;
+    uint8 private constant STATUS_FULL_MEMBER = 20; // Has payed the 10ETH fee
+
+    mapping(address => Airline) private airlines;
+    address[] private registered_airlines;
+    address[] private full_member_airlines;
+
+
+    struct Flight {
+        bytes32 flight_code;
+        bytes32 origin;
+        bytes32 destination;
+        bool isRegistered;
+        uint8 statusCode;
+        uint256 updatedTimestamp;        
+        address airline;
+        address[] insured_customers;
+    }
+    mapping(bytes32 => Flight) private flights;
+
     /********************************************************************************************/
     /*                                       EVENT DEFINITIONS                                  */
     /********************************************************************************************/

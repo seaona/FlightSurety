@@ -65,7 +65,7 @@ contract FlightSuretyApp {
     */
     modifier requireIsOperational() 
     {
-        require(flightSuretyData.isOperational() == true, "Contract is currently not operational");  
+        require(true, "Contract is currently not operational");  
         _;  // All modifiers require an "_" which indicates where the function body will be added
     }
 
@@ -98,7 +98,7 @@ contract FlightSuretyApp {
     constructor(address dataContract) public {
         contractOwner = msg.sender;
         flightSuretyData = FlightSuretyData(dataContract);
-        this.registerAirline(msg.sender);
+        flightSuretyData.registerAirline(contractOwner);
         airlineAccts.push(msg.sender);
     }
 
