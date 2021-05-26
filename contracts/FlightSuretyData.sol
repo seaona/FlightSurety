@@ -44,7 +44,7 @@ contract FlightSuretyData {
 
     mapping(bytes32 => Flight) private flights;
     mapping(bytes32 => mapping(address => uint)) private insured_customers;
-
+    mapping(bytes32 => mapping(address => uint)) private insured_due;
 
     /********************************************************************************************/
     /*                                       EVENT DEFINITIONS                                  */
@@ -73,7 +73,7 @@ contract FlightSuretyData {
     */
     modifier requireIsOperational() 
     {
-        require(operational, "Contract is currently not operational");
+        require(operational, "Contract is not operational");
         _;  // All modifiers require an "_" which indicates where the function body will be added
     }
 
@@ -81,7 +81,7 @@ contract FlightSuretyData {
     * @dev Modifier that requires the "ContractOwner" account to be the function caller
     */
     modifier requireContractOwner() {
-        require(msg.sender == contractOwner, "Caller is not contract owner");
+        require(msg.sender == contractOwner, "Function caller is not the contract owner");
         _;
     }
 

@@ -40,7 +40,7 @@ contract FlightSuretyApp {
     */
     modifier requireIsOperational() 
     {
-        require(true, "Contract is currently not operational");  
+        require(true, "Contract is not operational");  
         _;  // All modifiers require an "_" which indicates where the function body will be added
     }
 
@@ -49,7 +49,7 @@ contract FlightSuretyApp {
     */
     modifier requireContractOwner()
     {
-        require(msg.sender == contractOwner, "Caller is not contract owner");
+        require(msg.sender == contractOwner, "Function caller is not contract owner");
         _;
     }
 
