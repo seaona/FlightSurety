@@ -25,28 +25,7 @@ contract FlightSuretyApp {
 
     address private contractOwner;          // Account used to deploy contract
 
-    struct Flight {
-        bool isRegistered;
-        uint8 statusCode;
-        uint256 updatedTimestamp;        
-        address airline;
-    }
-    mapping(bytes32 => Flight) private flights;
-
-
-    // Airline status codes
-    uint8 private constant STATUS_NOT_REGISTERED = 0;
-    uint8 private constant STATUS_REGISTERED = 10;
-    uint8 private constant STATUS_FULL_MEMBER = 20; // Has payed the 10ETH fee
-
-    struct Airline {
-        uint8 statusCode;
-        address[] votes;
-    }
-
-    mapping(address => Airline) private airlines;
-    address[] private airlineAccts;
-
+ 
     // Multiparty consensus
     uint constant M = 4;
 

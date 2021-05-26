@@ -21,9 +21,9 @@ contract FlightSuretyData {
     }
 
     // Airline status codes
-    uint8 private constant STATUS_NOT_REGISTERED = 0;
-    uint8 private constant STATUS_REGISTERED = 10;
-    uint8 private constant STATUS_FULL_MEMBER = 20; // Has payed the 10ETH fee
+    uint8 private constant NOT_REGISTERED = 0;
+    uint8 private constant REGISTERED = 10;
+    uint8 private constant FULL_MEMBER = 20; // Has payed the 10ETH fee
 
     mapping(address => Airline) private airlines;
     address[] private registered_airlines;
@@ -35,12 +35,16 @@ contract FlightSuretyData {
         bytes32 origin;
         bytes32 destination;
         bool isRegistered;
+        bool isInsured;
         uint8 statusCode;
         uint256 updatedTimestamp;        
         address airline;
         address[] insured_customers;
     }
+
     mapping(bytes32 => Flight) private flights;
+    mapping(bytes32 => mapping(address => uint)) private insured_customers;
+
 
     /********************************************************************************************/
     /*                                       EVENT DEFINITIONS                                  */
@@ -76,12 +80,30 @@ contract FlightSuretyData {
     /**
     * @dev Modifier that requires the "ContractOwner" account to be the function caller
     */
-    modifier requireContractOwner()
-    {
+    modifier requireContractOwner() {
         require(msg.sender == contractOwner, "Caller is not contract owner");
         _;
     }
 
+    modifier requireAirlineNotRegistered(address addr) {
+        require(airlines[addr].statusCode == NOT_REGISTERED, "Airline already registered");
+        _;
+    }
+
+    modifier requireAirlineFullMember(address addr) {
+        require(airlines[addr].statusCode == FULL_MEMBER, "Airline cannot participate until submits 10ETH"););
+        _;
+    }
+
+    modifier requireRegisteredFlight(bytes32 flight) {
+        require(flights[flight].isRegistered, "Flight is not Registered");
+        _;
+    }
+
+    modifier requireInsuredFlight(bytes32 flight) {
+        require(flights[flight].isInsured, "Flight is not insured");
+        _;
+    }
     /********************************************************************************************/
     /*                                       UTILITY FUNCTIONS                                  */
     /********************************************************************************************/
@@ -105,6 +127,13 @@ contract FlightSuretyData {
         operational = mode;
     }
 
+    function getRegisteredAirlines() external view returns(address[]) {
+        return registered_airlines;
+    }
+
+    function getFullMemberAirlines() external view returns(address[]) {
+        return full_member_airlines;
+    }
     /********************************************************************************************/
     /*                                     SMART CONTRACT FUNCTIONS                             */
     /********************************************************************************************/
@@ -114,8 +143,8 @@ contract FlightSuretyData {
     *      Can only be called from FlightSuretyApp contract
     *
     */   
-    function registerAirline(address airline) external pure {
-        
+    function registerAirline(address airline, bytes32 name) external pure requireIsOperational requireAirlineNotRegistered {
+                
 
     }
 
