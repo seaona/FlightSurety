@@ -1,4 +1,3 @@
-
 import DOM from './dom';
 import Contract from './contract';
 import './flightsurety.css';
