@@ -90,7 +90,7 @@ contract FlightSuretyData {
     /**
     * @dev Modifier that requires address of not registered airline yet.
     */
-    modifier requireAirlineNotRegistred(address addr) {
+    modifier requireAirlineNotRegistered(address addr) {
         require(!airlines[addr].isRegistered, "Airline is already registered");
         _;
     }
@@ -172,10 +172,10 @@ contract FlightSuretyData {
                             )
     external 
     requireIsOperational
-    requireAirlineNotRegistred(new_airline)
+    requireAirlineNotRegistered(new_airline)
     //requireFund(main_airline)
     {
-        if(getNumAirlinesRegistred() >= AMOUNT_AIRLINES_COMPANY){
+        if(getNumAirlinesRegistered() >= AMOUNT_AIRLINES_COMPANY){
             createAirline(new_airline, airline_name, false, false);
         } else {
             createAirline(new_airline, airline_name, true, false);
@@ -229,7 +229,7 @@ contract FlightSuretyData {
     function vote(address airline_address, address airline_voting) 
     external 
     requireIsOperational
-    requireAirlineNotRegistred(airline_address)
+    requireAirlineNotRegistered(airline_address)
     requireRegistration(airline_voting)
     requireFund(airline_voting)
     {          
@@ -414,10 +414,10 @@ contract FlightSuretyData {
     }
 
     /**
-    * @dev Get the amount of registred airlines.
+    * @dev Get the amount of registered airlines.
     *
     */
-    function getNumAirlinesRegistred() public view returns(uint){
+    function getNumAirlinesRegistered() public view returns(uint){
         return airlines_list.length;
     }
 

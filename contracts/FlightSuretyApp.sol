@@ -82,9 +82,9 @@ contract FlightSuretyApp {
         return flightSuretyData.isOperational();  // Modify to call data contract's status
     }
 
-    function  getNumAirlinesRegistred() public view returns(uint)
+    function  getNumAirlinesRegistered() public view returns(uint)
     {
-        return flightSuretyData.getNumAirlinesRegistred();
+        return flightSuretyData.getNumAirlinesRegistered();
     }
 
     function getAirline(address address_airline)
@@ -223,11 +223,11 @@ contract FlightSuretyApp {
         uint8[3] indexes;        
     }
 
-    function getOracleInfo(address registred_oracle) 
+    function getOracleInfo(address registered_oracle) 
     public 
     view 
     requireContractOwner returns(bool, uint8[3] memory) {
-        return (oracles[registred_oracle].isRegistered, oracles[registred_oracle].indexes);
+        return (oracles[registered_oracle].isRegistered, oracles[registered_oracle].indexes);
     }
 
     // Track all registered oracles
@@ -418,7 +418,7 @@ contract FlightSuretyData {
     function vote(address airline_address, address airline_voting) external;
     function fundFee(address addr) external payable;
     function buy(address airline_address, string fligh_code, uint timestamp, address client) external payable; 
-    function getNumAirlinesRegistred() public view returns(uint);
+    function getNumAirlinesRegistered() public view returns(uint);
     function getAirline(address address_airline)external view returns(address, string memory, bool, bool, address[] memory);
     function getFlight(bytes32 flight_address) external view returns(string memory, string memory, string memory, uint, bool, bool, uint8, address, address[] memory);
     function getInsuredClient(bytes32 flight_hash, address client) public view returns(uint);
