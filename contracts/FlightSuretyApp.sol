@@ -73,8 +73,8 @@ contract FlightSuretyApp {
     /********************************************************************************************/
     /*                                       UTILITY FUNCTIONS                                  */
     /********************************************************************************************/
-    function getAirlinesRegistred() public view returns(address[]){
-        return flightSuretyData.getAirlinesRegistred();
+    function getAirlinesRegistered() public view returns(address[]){
+        return flightSuretyData.getAirlinesRegistered();
     }
 
     function isOperational() public view returns(bool) 
@@ -424,5 +424,5 @@ contract FlightSuretyData {
     function getInsuredClient(bytes32 flight_hash, address client) public view returns(uint);
     function getInsuredDue(bytes32 flight_hash, address client) public view returns(uint);
     function getNumAirlinesFunded() public view returns(uint);
-    function getAirlinesRegistred() external view returns(address[]);
+    function getAirlinesRegistered() external view returns(address[]);
 }

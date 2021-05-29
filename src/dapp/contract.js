@@ -54,10 +54,10 @@ export default class Contract {
             });
     }
 
-    getAirlinesRegistred(callback){
+    getAirlinesRegistered(callback){
         let self = this;
         self.flightSuretyApp.methods
-            .getAirlinesRegistred()
+            .getAirlinesRegistered()
             .call({from: self.owner}, callback);
     }
 

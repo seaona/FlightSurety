@@ -131,7 +131,7 @@ contract FlightSuretyData {
     /*                                       UTILITY FUNCTIONS                                  */
     /********************************************************************************************/
 
-    function getAirlinesRegistred() external view returns(address[]){
+    function getAirlinesRegistered() external view returns(address[]){
         return airlines_list;
     }
     /**

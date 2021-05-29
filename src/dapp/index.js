@@ -15,7 +15,7 @@ import './flightsurety.css';
             display('Operational Status', 'Check if contract is operational', [ { label: 'Operational Status', error: error, value: result} ]);
         });
     
-        contract.getAirlinesRegistred((error, result) => {
+        contract.getAirlinesRegistered((error, result) => {
 
             var $select = $('<select/>', {
                 'class':"form-select",
