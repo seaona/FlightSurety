@@ -313,8 +313,8 @@ import './flightsurety.css';
 function display(title, description, results) {
     let displayDiv = DOM.elid("display-wrapper");
     let section = DOM.section();
-    section.appendChild(DOM.h2(title));
-    section.appendChild(DOM.h5(description));
+    section.appendChild(DOM.h5(title));
+    section.appendChild(DOM.div(description));
     results.map((result) => {
         let row = section.appendChild(DOM.div({className:'row'}));
         row.appendChild(DOM.div({className: 'col-sm-4 field'}, result.label));

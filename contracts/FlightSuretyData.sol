@@ -308,9 +308,7 @@ contract FlightSuretyData {
         flights[flight_hash] = new_flight;
     }
 
-    function getFlight(bytes32 flight_hash) 
-    external
-    view
+    function getFlight(bytes32 flight_hash) external view
     returns(string memory, string memory, string memory, uint, bool, bool, uint8, address, address[]memory)
     {
         Flight storage flight = flights[flight_hash];
@@ -331,10 +329,7 @@ contract FlightSuretyData {
     * @dev Update the flight status.
     *
     */ 
-    function updateFlightStatus(bytes32 flight_hash, uint8 status_code)
-    external
-    requireIsOperational 
-    {
+    function updateFlightStatus(bytes32 flight_hash, uint8 status_code) external requireIsOperational {
         Flight storage flight = flights[flight_hash];
         flight.status = status_code;
     }
@@ -343,20 +338,15 @@ contract FlightSuretyData {
     * @dev Buy insurance for a flight
     *
     */   
-    function buy(
-                address airline_address,
-                string fligh_code,
-                uint timestamp,
-                address client                             
-                )
+    function buy(address airline_address, string fligh_code, uint timestamp,address client)
     external
     payable
     requireIsOperational
     requireFund(airline_address)
     {
-        require((msg.value > 0 ether && msg.value <= 1 ether), "It is not possible to accept this value of insure");
+        require((msg.value > 0 ether && msg.value <= 1 ether), "Value of insurance must be between 0 and 1");
         bytes32 flight_hash = getFlightKey(airline_address, fligh_code, timestamp);
-        require(insured_clients[flight_hash][client] == 0, "User already bought insurance for this flight");
+        require(insured_clients[flight_hash][client] == 0, "The user already bought an insurance for this flight");
         
         insured_due[flight_hash][client] = 0;
         flights[flight_hash].isInsured = true;

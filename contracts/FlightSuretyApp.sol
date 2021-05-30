@@ -64,9 +64,6 @@ contract FlightSuretyApp {
     {
         contractOwner = msg.sender;
         flightSuretyData = FlightSuretyData(data_contract);
-        //First airline pay_tax and register;
-        //uint ten_ether_fund = 10 ether;
-        //flightSuretyData.fundFee(contractOwner, ten_ether_fund);
         flightSuretyData.registerAirline(contractOwner, "Latam Airlines");
     }
 

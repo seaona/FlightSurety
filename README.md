@@ -1,6 +1,14 @@
 # FlightSurety
 
 FlightSurety is a sample application project for Udacity's Blockchain course.
+The workflow is as follows:
+1. **Register an Airline**, with a name and an ETH Address
+2. **Pay 10 ETH Fee** for getting full membership
+3. **Register a Flight** (only full-members), with Flight code, origin and destiny
+4. **Buy an Insurance** for that Flight
+5. **Claim Repayment**, if the conditions are met (flight delayed due to Airline fault) - this is checked via the Oracle server
+
+![](assets/Flight-Flow.gif)!
 
 ## Install
 

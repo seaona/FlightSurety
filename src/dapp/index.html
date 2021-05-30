@@ -10,98 +10,95 @@
 </head>
 
 <body>
-
-    <div class="pos-f-t">
-        <div class="collapse" id="navbarToggleExternalContent">
-          <div class="bg-dark p-4">
-            <h4 class="text-white">Airline</h4>
-            <ul class="list-group">
-                <a href="#create_airline" onClick="changeView('#create_airline')"><span class="text-muted">Create Airline</span></a>
-                <a href="#pay_fee" onClick="changeView('#pay_fee')"><span class="text-muted">Pay Fee</span></a>
-                <a href="#register_flight" onClick="changeView('#register_flight')"><span class="text-muted">Register Flight</span></a>
-            </ul>
-            <p></p>
-            <h4 class="text-white">Passenger</h4>
-            <ul class="list-group">
-                <a href="#buy_insure"><span class="text-muted">Buy Insure</span></a>
-                <a href="#oracles"><span class="text-muted">Flight Update</span></a>
-            </ul>
-          </div>
-        </div>
-        <nav class="navbar navbar-dark bg-dark">
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-        </nav>
-      </div>
-
+  <h1 >Flight Surety Dapp</h1>
     <main class="container">
-        
-        <div class="main-content" data-spy="scroll" data-target="#dl-menu">
-            
-            <section id="create_airline" class="create_airline">
-                <h2>Create Airline</h2>
+      
+        <div class ="col" class="main-content" data-spy="scroll" data-target="#dl-menu">
+            <h2>Write Actions</h2>
+          <section id="create_airline" class="create_airline">
+              <h5>Create Airline</h5>
+              <div>
                 <input type="text" id="name_airline" placeholder="Name">
+              </div>
+              <div>
                 <input type="text" id="addr_airline" placeholder="New Address">
-                <button class="btn btn-primary" id="submit_create_airline">Create</button>
-            </section>
-            
-            <section id="pay_fee" class="pay_fee">
-                <h2>Pay Fee</h2>
-                <div id="div_pay_fee"></div>
+              </div>
+              <button class="btn btn-primary" id="submit_create_airline">Create</button>
+          </section>
+          
+          <section id="pay_fee" class="pay_fee">
+              <h5>Pay Fee</h5>
+              <div id="div_pay_fee"></div>
+              <div>
                 <input type="text" id="addr_airline_fee" placeholder="Eth value">
-                <button class="btn btn-primary" id="submit_pay_fee">Pay Fee</button>
-            </section>
-            
-            <section id="register_flight" class="register_flight">
-                <h2>Register Flight</h2>
+              </div>
+              <button class="btn btn-primary" id="submit_pay_fee">Pay Fee</button>
+          </section>
+          
+          <section id="register_flight" class="register_flight">
+              <h5>Register Flight</h5>
 
-                <div id="div_register_flight"></div>
+              <div id="div_register_flight"></div>
+              <div>
                 <input type="text" id="flight_code" placeholder="Flight code"> 
+              </div>
+              <div>
                 <input type="text" id="flight_origin" placeholder="Origin"> 
+              </div>
+              <div>
                 <input type="text" id="flight_destination" placeholder="Destination"> 
-                <button class="btn btn-primary" id="submit_register_flight">Submit Oracles</button>                        
+             
+              </div>
+              <button class="btn btn-primary" id="submit_register_flight">Submit Oracles</button>                        
 
-            </section>
-    
-            <section id="buy_insure" class="buy_insure">
-                <h2>Buy Insure</h2>
-            
-                <div id="div_buy_insure_airlines"></div>
-                <div id="div_buy_insure"></div>
+          </section>
+  
+          <section id="buy_insure" class="buy_insure">
+              <h5>Buy Insure</h5>
+          
+              <div id="div_buy_insure_airlines"></div>
+              <div id="div_buy_insure"></div>
+              <div>
                 <input type="text" id="buy_client_address" placeholder="Client Address"> 
+              </div>
+              <div>
                 <input type="text" id="buy_value" placeholder="Value of insure">
-                <button id="submit_buy_insure"  class="btn btn-primary">Buy</button>                        
-                        
-            </section>
+              </div>
+              <button id="submit_buy_insure"  class="btn btn-primary">Buy</button>                        
+                      
+          </section>
 
-            <section id="user_balance" class="user_balance">
-              <h2>Passenger Balance</h2>
-              <div id="div_user_balance"></div>
-              <input type="text" id="balance_client_address" placeholder="Client Address"> 
-              <h3>Balance: <span id="user_balance_label" class="badge badge-secondary"></span></h3>
-              <button id="check_balance" class="btn btn-primary">Check</button>
-            </section>
-            
-            <section id="claim_withdraw" class="claim_withdraw">
-              <h2>Claim Withdraw</h2>
-              <div id="div_claim_w_flight_code"></div>
-              <input type="text" id="claim_w_client_address" placeholder="Client Address">
-              <h3>Entitled to: <span id="user_withdraw_label" class="badge badge-success"></span></h3>
-              <button id="submit_know_value" class="btn btn-warning btn-sm">Know value</button>
-              <button id="submit_claim_withdraw" class="btn btn-primary">Get Withdraw</button>
-            </section>
+          <section id="user_balance" class="user_balance">
+            <h5>Passenger Balance</h5>
+            <div id="div_user_balance"></div>
+            <input type="text" id="balance_client_address" placeholder="Client Address"> 
+            <h5>Balance: <span id="user_balance_label" ></span></h5>
+            <button id="check_balance" class="btn btn-primary">Check</button>
+          </section>
+          
+          <section id="claim_withdraw" class="claim_withdraw">
+            <h5>Claim Withdraw</h5>
+            <div id="div_claim_w_flight_code"></div>
+            <input type="text" id="claim_w_client_address" placeholder="Client Address">
+            <h5>Entitled to: <span id="user_withdraw_label" class="badge badge-success"></span></h5>
+            <button id="submit_know_value" class="btn btn-warning btn-sm">Know value</button>
+            <button id="submit_claim_withdraw" class="btn btn-primary">Get Withdraw</button>
+          </section>
 
-            <section id="oracles" class="oracles">
-                <h2>Submit Oracles</h2>
-                <div id="div_submit_oracles"></div>
-                <button id="submit-oracle" class="btn btn-primary">Submit Oracle</button>
-            
-            </section>
+          <section id="oracles" class="oracles">
+              <h2>Submit Oracles</h2>
+              <div id="div_submit_oracles"></div>
+              <button id="submit-oracle" class="btn btn-primary">Submit Oracle</button>
+          
+          </section>
         </div>
 
-        <div id="display-wrapper" class="top-20">
+        <div class ="col" >
+          <h2>Transaction History</h2>
+          <div id="display-wrapper" ></div>
         </div>
+
+      
     </main>
   <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

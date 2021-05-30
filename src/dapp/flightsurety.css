@@ -5,17 +5,22 @@ body {
 }
 
 .container {
-    margin-top: 100px;
+    margin-top: 3em;
     background-color: #000;
     opacity: 0.9;
     color: #fff;
     padding: 40px;
+    display: flex;
+
 }
 
 .top-20 {
     margin-top: 20px;
 }
 
+h1 {
+    text-align: center;
+}
 h5 {
     color: #999999;
 }
@@ -56,3 +61,9 @@ input[type=text], select {
     cursor: pointer;
   }
 
+
+.col {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
