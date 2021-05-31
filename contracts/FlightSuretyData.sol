@@ -8,7 +8,7 @@ contract FlightSuretyData {
     /********************************************************************************************/
     /*                                       DATA VARIABLES                                     */
     /********************************************************************************************/
-    uint8 private constant AMOUNT_AIRLINES_COMPANY = 4;    
+    uint8 private constant MIN_AIRLINES = 4;    
     uint256 private constant AIRLINE_FUNDING_VALUE = 10 ether;
 
     address private contractOwner;                                      // Account used to deploy contract
@@ -173,9 +173,8 @@ contract FlightSuretyData {
     external 
     requireIsOperational
     requireAirlineNotRegistered(new_airline)
-    //requireFund(main_airline)
     {
-        if(getNumAirlinesRegistered() >= AMOUNT_AIRLINES_COMPANY){
+        if(getNumAirlinesRegistered() >= MIN_AIRLINES){
             createAirline(new_airline, airline_name, false, false);
         } else {
             createAirline(new_airline, airline_name, true, false);
@@ -269,7 +268,7 @@ contract FlightSuretyData {
     requireIsOperational 
     requireRegistration(addr)
     {
-        require(msg.value == AIRLINE_FUNDING_VALUE, "The initial airline fee is equal to 10 ether");
+        require(msg.value == AIRLINE_FUNDING_VALUE, "The initial airline fee is not equal to 10 ether");
         //contract.address.transfer(msg.value);
         airlines[addr].isFunded = true;
         airlines_funded_list.push(addr);
