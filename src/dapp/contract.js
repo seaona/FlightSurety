@@ -15,8 +15,8 @@ export default class Contract {
     }
 
     initialize(callback) {
-        this.web3.eth.getAccounts((error, accts) => {
-           
+        this.web3.eth.getAccounts(async (error, accts) => {
+            await window.ethereum.enable();
             this.owner = accts[0];
 
             let counter = 1;

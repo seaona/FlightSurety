@@ -1,7 +1,7 @@
 import DOM from './dom';
 import Contract from './contract';
 import './flightsurety.css';
-
+import BigNumber from 'bignumber.js';
 
 (async() => {
 
@@ -283,7 +283,6 @@ import './flightsurety.css';
                     flight_code = flight_code_timestamp[0];
                     timestamp = flight_code_timestamp[1];
                     airline_adress = flight_code_timestamp[2];
-
                     contract.withdraw(airline_adress, flight_code, timestamp, address_client, (error, result) => {
                         display('Claim Withdraw', 'User '+address_client, [ { label: 'Registration:', error: error,  value: 'Success - Withdraw paid' } ]);
                     });
@@ -297,7 +296,7 @@ import './flightsurety.css';
 
         // User-submitted transaction
         DOM.elid('submit-oracle').addEventListener('click', () => {
-            let flight = DOM.elid('flight-number').value;
+            let flight = DOM.elid('flight_code').value;
             // Write transaction
             contract.fetchFlightStatus(flight, (error, result) => {
                 display('Oracles', 'Trigger oracles', [ { label: 'Fetch Flight Status', error: error, value: result.flight + ' ' + result.timestamp} ]);
