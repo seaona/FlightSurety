@@ -24,6 +24,7 @@ contract FlightSuretyApp {
 
     address private contractOwner;          // Account used to deploy contract
  
+    mapping(address => address[]) airlineVotes;
     /********************************************************************************************/
     /*                                       FUNCTION MODIFIERS                                 */
     /********************************************************************************************/
@@ -165,7 +166,30 @@ contract FlightSuretyApp {
                              string memory airline_name                            )
     public
     {
-        flightSuretyData.registerAirline(airline_address, airline_name);
+        uint256 numberOfAirlines = getNumAirlinesRegistered();
+        if (4 > numberOfAirlines) {
+            registerValidAirline(airline_address, airline_name, 1);
+        } else {
+            voteIfHasNotVoted(msg.sender, airline_address);
+            registerIfConsensusAchieved(airline_address, numberOfAirlines, airline_name);
+        }
+    }
+
+    function registerValidAirline(address airline, string name, uint256 votes) private {
+        flightSuretyData.registerAirline(airline, name);
+    }
+
+    function registerIfConsensusAchieved(address airline, uint256 numberOfAirlines, string name) 
+        private
+    {
+        uint256 requiredVotes = numberOfAirlines.mul(5).div(10);
+        uint256 mod10 = numberOfAirlines.mul(5).div(10);
+        if (mod10 >= 1) {
+            requiredVotes = requiredVotes.add(1);
+        }
+        if(airlineVotes[airline].length >= requiredVotes) {
+            registerValidAirline(airline, name, airlineVotes[airline].length);
+        }
     }
 
    /**
@@ -202,6 +226,19 @@ contract FlightSuretyApp {
     }
 
 
+
+function voteIfHasNotVoted(address voter, address _newAirline) private {
+        bool hasVoted = false; 
+        for (uint i=0; i< airlineVotes[_newAirline].length; i++){
+            if (airlineVotes[_newAirline][i] == voter){
+                hasVoted = true;
+                break;
+            }
+        }
+        if(!hasVoted){
+            airlineVotes[_newAirline].push(voter);
+        }
+    }
 
 // region ORACLE MANAGEMENT
 

@@ -8,7 +8,7 @@ The workflow is as follows:
 4. **Buy an Insurance** for that Flight
 5. **Claim Repayment**, if the conditions are met (flight delayed due to Airline fault) - this is checked via the Oracle server
 
-![](assets/Flight-Flow.gif)!
+![](assets/app-flow.gif)!
 
 ## Install
 
